@@ -75,3 +75,51 @@ A temporary virtual environment was created outside the course repository to ver
 The temporary test environment was removed after verification.
 
 No project-specific Python environment or Python dependencies have been added to G64 at this stage. Application-specific Python configuration will be introduced only if required by the later planning and architecture process.
+
+## Docker Environment
+
+Docker is provided through Docker Desktop on the Windows host and integrated with the Ubuntu WSL2 development environment.
+
+Installed versions at initial setup:
+
+- Docker Desktop: `4.91.0`
+- Docker Engine: `29.8.0`
+- Docker CLI: `29.8.0`
+- Docker Compose: `v5.5.1`
+
+Docker Desktop uses the WSL2 backend and is integrated with the `Ubuntu-26.04` distribution.
+
+The Docker CLI is available inside Ubuntu at:
+
+`/usr/bin/docker`
+
+A separate Docker Engine was not installed inside Ubuntu. The Ubuntu Docker CLI communicates with the engine managed by Docker Desktop.
+
+### Verification
+
+The Docker setup was verified from Ubuntu using both client/server inspection and an actual container execution.
+
+`docker version` confirmed communication between:
+
+- the Linux Docker client running inside Ubuntu/WSL2; and
+- Docker Engine running through Docker Desktop.
+
+The first WSL session did not initially have the newly assigned `docker` group membership loaded. The Docker socket was owned by the `docker` group and the user was already registered as a member, so WSL was restarted to refresh the user session rather than changing socket permissions or installing another Docker service.
+
+After the restart, the user session included the `docker` group and Docker Engine became accessible without `sudo`.
+
+The engine was then verified with:
+
+`docker run hello-world`
+
+Docker successfully:
+
+1. contacted the Docker daemon;
+2. downloaded the `hello-world` image from Docker Hub;
+3. created a container from the image;
+4. executed the container; and
+5. returned the expected `Hello from Docker!` output.
+
+Running the command a second time reused the locally available image and successfully created another container.
+
+No project-specific Docker configuration has been added to G64 at this stage. Dockerfiles, Compose configuration, and application container architecture will be introduced only if required by the later planning and architecture process.
